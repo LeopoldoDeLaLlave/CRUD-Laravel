@@ -19,20 +19,26 @@
 export default {
   data() {
     return {
-      notes: [{ id: 1, description: "abc", created_at: "02/02/2021" }],
+      notes: [],
     };
+  },
+  mounted() {
+    axios
+      .get("/EjerciciosLaravel/NotesLaravel/public/notes")
+      .then((response) => {
+        this.notes=response.data;
+      });
   },
   methods: {
     addNote(note) {
       this.notes.push(note);
     },
-    deleteNote(index){
-        this.notes.splice(index, 1);
+    deleteNote(index) {
+      this.notes.splice(index, 1);
     },
-    updateNote(index, note){
-        
-        this.notes[index]=note;
-    }
+    updateNote(index, note) {
+      this.notes[index] = note;
+    },
   },
 };
 </script>

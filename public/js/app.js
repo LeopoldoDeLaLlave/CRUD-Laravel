@@ -1933,19 +1933,17 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     newNote: function newNote() {
+      var _this = this;
+
       var params = {
         description: this.description
       };
-      axios.post('/notes', params).then(function (response) {
-        return console.log(response);
-      });
-      var note = {
-        id: 2,
-        description: this.description,
-        create_at: '03/02/2021'
-      };
-      this.$emit('new', note);
       this.description = "";
+      axios.post('/EjerciciosLaravel/NotesLaravel/public/notes', params).then(function (response) {
+        var note = response.data;
+
+        _this.$emit('new', note);
+      });
     }
   }
 });
@@ -1981,12 +1979,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      notes: [{
-        id: 1,
-        description: "abc",
-        created_at: "02/02/2021"
-      }]
+      notes: []
     };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.get("/EjerciciosLaravel/NotesLaravel/public/notes").then(function (response) {
+      _this.notes = response.data;
+    });
   },
   methods: {
     addNote: function addNote(note) {
@@ -2031,6 +2032,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["note"],
   data: function data() {
@@ -2040,14 +2049,27 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     onClickDelete: function onClickDelete() {
-      this.$emit("delete");
+      var _this = this;
+
+      axios["delete"]("/EjerciciosLaravel/NotesLaravel/public/notes/".concat(this.note.id)).then(function () {
+        _this.$emit("delete");
+      });
     },
     onClickEdit: function onClickEdit() {
       this.editMode = true;
     },
     onClickUpdate: function onClickUpdate() {
-      this.editMode = false;
-      this.$emit('update', this.note.description);
+      var _this2 = this;
+
+      var params = {
+        description: this.note.description
+      };
+      axios.put("/EjerciciosLaravel/NotesLaravel/public/notes/".concat(this.note.id), params).then(function (response) {
+        _this2.editMode = false;
+        var rnote = response;
+
+        _this2.$emit("update", rnote);
+      });
     }
   }
 });
@@ -37787,7 +37809,12 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card" }, [
     _c("div", { staticClass: "card-header" }, [
-      _vm._v("Publicado en: " + _vm._s(_vm.note.created_at))
+      _vm._v(
+        "Publicado en: " +
+          _vm._s(_vm.note.created_at) +
+          " - Actualizado en: " +
+          _vm._s(_vm.note.updated_at)
+      )
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "card-body" }, [
@@ -37828,7 +37855,7 @@ var render = function() {
                 }
               }
             },
-            [_vm._v("Guardar Cambios")]
+            [_vm._v("\n      Guardar Cambios\n    ")]
           )
         : _c(
             "button",
@@ -37840,7 +37867,7 @@ var render = function() {
                 }
               }
             },
-            [_vm._v("Editar")]
+            [_vm._v("\n      Editar\n    ")]
           ),
       _vm._v(" "),
       _c(

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Note;
 use Illuminate\Http\Request;
-use app\Note;
 
 class NoteController extends Controller
 {
@@ -14,7 +14,7 @@ class NoteController extends Controller
         $this->middleware('auth');
     }
 
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -33,12 +33,19 @@ class NoteController extends Controller
      */
     public function store(Request $request)
     {
-        $note = new Note();
-        $note->description = $request->description;
-        $note->user_id = auth()->id();
-        $note->save();
 
-        return $note;
+      
+            
+            $note = new Note();
+            $note->description = $request->description;
+            $note->user_id = auth()->id();
+            $note->save();
+            return $note;
+          
+       
+
+
+        
     }
 
     /**
@@ -63,8 +70,9 @@ class NoteController extends Controller
     {
         $note = new Note();
         $note->description = $request->description;
+        $note->user_id = auth()->id();
         $note->save();
-
+        return $request->description;
     }
 
     /**

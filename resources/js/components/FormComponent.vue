@@ -30,15 +30,15 @@
                     description: this.description 
                 }
 
-                axios.post('/notes', params).then((response)=>console.log(response));
-
-                let note = {
-                    id: 2,
-                    description: this.description,
-                    create_at: '03/02/2021'
-                }
-                this.$emit('new', note);
                 this.description=""
+                
+                axios.post('/EjerciciosLaravel/NotesLaravel/public/notes', params).
+                then((response)=>{
+                    const note = response.data;
+                    this.$emit('new', note);
+                });
+
+                
             }
         }
     }
